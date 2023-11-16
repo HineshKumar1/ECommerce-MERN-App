@@ -1,0 +1,16 @@
+{
+  "name": "ECommerce-Backend-App",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.3.0",
+    "morgan": "^1.10.0"
+  }
+}
