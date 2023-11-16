@@ -16,6 +16,8 @@ connectDB();
 //Port Configuration
 const port = process.env.PORT || 5000
 
+app.use("/user",require("./routes/user.js"))
+
 app.listen(port,()=>{
     console.log(`Server is Lisiting on port ${port}`);
 })
