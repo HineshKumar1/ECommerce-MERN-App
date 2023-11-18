@@ -1,3 +1,4 @@
+const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
-});
+},{timestamps:true});
 
 const User = mongoose.model('User', userSchema);
 
