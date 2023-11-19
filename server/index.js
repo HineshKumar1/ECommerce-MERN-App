@@ -9,6 +9,7 @@ const connectDB = require("./config/db.js")
 //middleware
 app.use(express.json())
 app.use(morgan("dev"))
+import '@fortawesome/fontawesome-free/css/all.css';
 
 //Connection to Databse
 connectDB();

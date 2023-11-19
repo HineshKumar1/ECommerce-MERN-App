@@ -1,16 +1,17 @@
 import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Layout(porps) {
   return (
     <div>
         <Header></Header>
-        <h1>Layout</h1>
         <main style={{minHeight:"80vh"}}>
+        <ToastContainer />
         {porps.children}
         </main>
-       
         <Footer></Footer>
     </div>
   )
