@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan")
 require("dotenv").config();
+const cors = require("cors")
 const colors = require("colors");
 const connectDB = require("./config/db.js")
 
 
 //middleware
+app.use(cors())
 app.use(express.json())
 app.use(morgan("dev"))
-import '@fortawesome/fontawesome-free/css/all.css';
 
 //Connection to Databse
 connectDB();

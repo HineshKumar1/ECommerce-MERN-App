@@ -4,12 +4,9 @@ import Layout from '../components/layout/Layout';
 import { toast } from 'react-toastify';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
-function SignUp() {
+function Login() {
     const Navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: '',
-        address:"",
-        phone:"",
         email: '',
         password: '',
     })
@@ -18,28 +15,22 @@ function SignUp() {
       };
     const handleSubmit = async(e)=>{
         e.preventDefault();
-        const response = await axios.post(`${process.env.REACT_APP_API}/user/`,
+        const response = await axios.post(`${process.env.REACT_APP_API}/user/login`,
         formData
         )
         if(response.data.status){
           toast.success(response.data.message);
           setFormData({
-            name:'',
             email:'',
             password:'',
-            phone:'',
-            address:''
+
           })
           setTimeout(()=>{
-            Navigate('/login');
+            Navigate('/home');
           },2500)
         }else{
           toast.error(response.data.message)
         }
-
-      function newFunction() {
-        Navigate('/login');
-      }
     }
   return (
     <>
@@ -52,30 +43,8 @@ function SignUp() {
           <div className="card-body p-md-5">
             <div className="row justify-content-center">
               <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login</p>
                 <form className="mx-1 mx-md-4" onSubmit={handleSubmit}>
-                  <div className="d-flex flex-row align-items-center mb-4">
-                  <i className="fas fa-user fa-lg me-3 fa-fw" />
-                    <div className="form-outline flex-fill mb-0">
-                      <input type="text" id="name" value={formData.name} onChange={handleChange} name='name' placeholder='Name' className="form-control" />
-                      <label className="form-label" htmlFor="form3Example1c"></label>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-row align-items-center mb-4">
-                  <i class="fa-solid fa-phone fa-lg me-3 fa-fw"/>
-                    <div className="form-outline flex-fill mb-0">
-                      <input type="text" name='phone' id="form3Example1c" value={formData.phone} onChange={handleChange} placeholder='Phone Number' className="form-control" />
-                      <label className="form-label" htmlFor="form3Example1c"></label>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-row align-items-center mb-4">
-                  <i class="fa-solid fa-address-book fa-lg me-3 fa-fw" />
-                    <div className="form-outline flex-fill mb-0">
-                      <input type="text" name='address' onChange={handleChange} value={formData.address} placeholder='Address' className="form-control" />
-                      <label className="form-label" htmlFor="form3Example1c"></label>
-                    </div>
-                  </div>
-                
                   <div className="d-flex flex-row align-items-center mb-4">
                     <i className="fas fa-envelope fa-lg me-3 fa-fw" />
                     <div className="form-outline flex-fill mb-0">
@@ -97,7 +66,7 @@ function SignUp() {
                     </label>
                   </div>
                   <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" className="btn btn-primary btn-lg">Register</button>
+                    <button type="submit" className="btn btn-primary btn-lg">Login</button>
                   </div>
                 </form>
               </div>
@@ -116,4 +85,4 @@ function SignUp() {
   )
 }
 
-export default SignUp
+export default Login
