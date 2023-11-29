@@ -7,12 +7,20 @@ import Policy from './pages/Policy';
 import PageNotFound from './pages/PageNotFound';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-
+import Dashboard from './pages/User/Dashboard';
+import PrivateRoute from './components/routes/Private';
 function App() {
   return(
     <>
       <Routes>
         <Route path='/home' element={<HomePage/>}></Route>
+
+        <Route path='/dashboard' element={<PrivateRoute/>}>
+          <Route path='' element={<Dashboard/>} />
+          </Route>
+
+        <Route path='/policy' element={<Policy/>}></Route>
+        <Route path='/policy' element={<Policy/>}></Route>
         <Route path='/policy' element={<Policy/>}></Route>
         <Route path='/contact' element={<Contact/>}></Route>
         <Route path='/about' element={<About/>}></Route>

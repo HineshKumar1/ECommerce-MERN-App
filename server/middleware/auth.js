@@ -3,7 +3,8 @@ const User = require("../models/user");
 
 const verifyToken = async (req, res, next) => {
   try {
-    const deCode = JWT.verify(req.header.authorization, process.env.SECRET_KEY);
+    const deCode = JWT.verify(req.headers.authorization, process.env.SECRET_KEY);
+    console.log("dcode------>",deCode)
     req.user = deCode
     next();
   } catch (error) {
@@ -28,4 +29,4 @@ const isAdmin = async(req,res,next)=>{
     }
 }
 
-module.exports = {verifyToken,isAdmin}
+module.exports = {verifyToken, isAdmin}
