@@ -4,12 +4,15 @@ import Layout from '../components/layout/Layout';
 import { toast } from 'react-toastify';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../components/context/auth';
+
 function Login() {
     const Navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     })
+    const  [auth,setAuth] = useAuth();
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
       };
@@ -23,11 +26,16 @@ function Login() {
           setFormData({
             email:'',
             password:'',
-
           })
+          setAuth({
+            ...auth,
+            user: response.data.user,
+            token: response.data.token
+          })
+          localStorage.setItem('auth',JSON.stringify(response.data))
           setTimeout(()=>{
             Navigate('/home');
-          },2500)
+          },2000)
         }else{
           toast.error(response.data.message)
         }
