@@ -30,17 +30,7 @@ function Header() {
         <li className="nav-item">
           <NavLink className="nav-link" aria-current="page" to="/contact">Category</NavLink>
         </li>
-        {/* <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Action</a></li>
-            <li><a className="dropdown-item" href="#">Another action</a></li>
-            <li><hr className="dropdown-divider" /></li>
-            <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> */}
+        
         {!auth.user ? (<>
           <li className="nav-item">
           <Link className="nav-link" to="/login">Login</Link>
@@ -49,7 +39,15 @@ function Header() {
           <NavLink className="nav-link" to="/signup">SignUp</NavLink>
         </li>
         </>) : (<> <li className="nav-item">
-          <Link onClick={handleLogout} to="/login" className="nav-link">Logout</Link>
+        <li className="nav-item dropdown">
+          <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {auth?.user?.name}
+          </a>
+          <ul className="dropdown-menu">
+            <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
+            <li><Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link></li>
+          </ul>
+        </li>
         </li></>)}
         <li className="nav-item">
           <Link className="nav-link" to="/*">Card</Link>

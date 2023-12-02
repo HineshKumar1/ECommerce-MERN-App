@@ -9,16 +9,17 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Dashboard from './pages/User/Dashboard';
 import PrivateRoute from './components/routes/Private';
+import ForgotPassword from './pages/ForgotPassword';
 function App() {
   return(
     <>
       <Routes>
         <Route path='/home' element={<HomePage/>}></Route>
 
-        <Route path='/dashboard' element={<PrivateRoute/>}>
-          <Route path='' element={<Dashboard/>} />
+        <Route path='/' element={<PrivateRoute/>}>
+          <Route path='/dashboard' element={<Dashboard/>} />
           </Route>
-
+        <Route path='/forgotpassword' element={<ForgotPassword/>}></Route>
         <Route path='/policy' element={<Policy/>}></Route>
         <Route path='/policy' element={<Policy/>}></Route>
         <Route path='/policy' element={<Policy/>}></Route>

@@ -2,12 +2,13 @@ import React,{useState} from 'react'
 import '@fortawesome/fontawesome-free/css/all.css';
 import Layout from '../components/layout/Layout';
 import { toast } from 'react-toastify';
-import {useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../components/context/auth';
 
 function Login() {
     const Navigate = useNavigate();
+    const location = useLocation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -34,7 +35,7 @@ function Login() {
           })
           localStorage.setItem('auth',JSON.stringify(response.data))
           setTimeout(()=>{
-            Navigate('/home');
+            Navigate(location.state || '/dashboard');
           },2000)
         }else{
           toast.error(response.data.message)
@@ -67,10 +68,9 @@ function Login() {
                       <label className="form-label" htmlFor="form3Example4c"></label>
                     </div>
                   </div>
-                  <div className="form-check d-flex justify-content-center mb-5">
-                    <input className="form-check-input me-2" type="checkbox" defaultValue id="form2Example3c" />
+                  <div className="form-check d-flex justify-content-center mb-3">
                     <label className="form-check-label" htmlFor="form2Example3">
-                      I agree all statements in <a href="#!">Terms of service</a>
+                      <Link to="/forgotPassword">Forgot Password ?</Link>
                     </label>
                   </div>
                   <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">

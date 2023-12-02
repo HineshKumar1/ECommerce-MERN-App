@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/auth";
 import { Outlet } from 'react-router-dom';
 import axios from "axios";
-import { Flex, Spin } from 'antd';
+import Spinner from "../utils/Spinner";
 
 export default function PrivateRoute() {
     const [ok, setOk] = useState(false);
@@ -32,5 +32,5 @@ export default function PrivateRoute() {
         }
     }, [auth?.token]);
 
-    return ok ? <Outlet /> :  <Spin size="large" />;
+    return ok ? <Outlet /> :  <Spinner/>;
 }
