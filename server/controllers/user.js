@@ -16,7 +16,7 @@ const addUser = async (req, res) => {
       password: hashedPassword, 
       phone,
       address,
-      role,
+      role:0,
     });
 
     const existingUser = await User.findOne({ email });
@@ -69,7 +69,8 @@ const login = async(req,res,next)=>{
         name:user.name,
         email:user.email,
         phone:user.phone,
-        address:user.address
+        address:user.address,
+        role:user.role
       },
       token
     })

@@ -35,8 +35,8 @@ function Login() {
           })
           localStorage.setItem('auth',JSON.stringify(response.data))
           setTimeout(()=>{
-            Navigate(location.state || '/dashboard');
-          },2000)
+            Navigate(location.state || "/");
+          },1000)
         }else{
           toast.error(response.data.message)
         }
