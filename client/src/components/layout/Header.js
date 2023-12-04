@@ -20,7 +20,7 @@ function Header() {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/home">
+          <Link className="navbar-brand" to="/">
             🛒 Order Good{" "}
           </Link>
           <button
@@ -40,7 +40,7 @@ function Header() {
                 <NavLink
                   className="nav-link active"
                   aria-current="page"
-                  to="/home"
+                  to="/"
                 >
                   Home
                 </NavLink>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 function Footer() {
   return (
@@ -16,16 +17,7 @@ function Footer() {
           <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
             <h5 className="text-uppercase">Links</h5>
             <ul className="list-unstyled mb-0">
-              <li><a href="#!" className="text-white">Link 1</a></li>
-              <li><a href="#!" className="text-white">Link 2</a></li>
-              <li><a href="#!" className="text-white">Link 3</a></li>
-              <li><a href="#!" className="text-white">Link 4</a></li>
-            </ul>
-          </div>
-          <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
-            <h5 className="text-uppercase">Links</h5>
-            <ul className="list-unstyled mb-0">
-              <li><a href="#!" className="text-white">Link 1</a></li>
+              <li><NavLink to="/contact" className="text-white">Contact User</NavLink></li>
               <li><a href="#!" className="text-white">Link 2</a></li>
               <li><a href="#!" className="text-white">Link 3</a></li>
               <li><a href="#!" className="text-white">Link 4</a></li>
@@ -55,7 +47,7 @@ function Footer() {
       <section className="">
         <p className="d-flex justify-content-center align-items-center">
           <span className="me-3">Register for free</span>
-          <button type="button" className="btn btn-outline-light btn-rounded">Sign up!</button>
+          <NavLink  type="button" to="/signup" className="btn btn-outline-light btn-rounded">Sign up!</NavLink>
         </p>
       </section>
       <hr className="mb-4" />
