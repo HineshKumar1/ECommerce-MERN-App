@@ -5,7 +5,7 @@ require("dotenv").config();
 const cors = require("cors")
 const colors = require("colors");
 const connectDB = require("./config/db.js")
-
+const category = require("./routes/category.js")
 
 //middleware
 app.use(cors())
@@ -19,6 +19,7 @@ connectDB();
 const port = process.env.PORT || 5000
 
 app.use("/user",require("./routes/user.js"))
+app.use("/category",category)
 
 app.listen(port,()=>{
     console.log(`Server is Lisiting on port ${port}`);
