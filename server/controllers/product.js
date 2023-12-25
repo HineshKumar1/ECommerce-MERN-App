@@ -58,7 +58,7 @@ const getProduct = async (req, res) => {
       status: true,
       message: "Product Fetched Successfully!",
       totalCount: product.length,
-      data: product,
+      product
     });
   } catch (err) {
     console.log(err);
