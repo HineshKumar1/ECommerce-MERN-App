@@ -72,18 +72,17 @@ const getProduct = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   try {
     const product = await productModel
-      .findOne({ slug: req.params.slug }).select("-image")
-      .populate("category");
+      .findOne({ slug: req.params.slug }).select("-image").populate("category");
     res.status(200).send({
       status: true,
       message: "Product Fetch Successfully!",
-      data: product,
+      product,
     });
   } catch (err) {
     console.log(err);
     res.status(500).send({
       status: false,
-      message: "Error While fetching products!",
+      message: "Error While fetching product!",
     });
   }
 };
@@ -122,10 +121,59 @@ const deleteProduct = async(req,res,next)=>{
     })
   }
 }
+
+const updateProduct = async (req, res) => {
+  try {
+    const { title, description, price, category, quantity, shipping } =
+      req.fields;
+    const { photo } = req.files;
+    //alidation
+    switch (true) {
+      case !title:
+        return res.status(500).send({ error: "Name is Required" });
+      case !description:
+        return res.status(500).send({ error: "Description is Required" });
+      case !price:
+        return res.status(500).send({ error: "Price is Required" });
+      case !category:
+        return res.status(500).send({ error: "Category is Required" });
+      case !quantity:
+        return res.status(500).send({ error: "Quantity is Required" });
+      case photo && photo.size > 1000000:
+        return res
+          .status(500)
+          .send({ error: "photo is Required and should be less then 1mb" });
+    }
+
+    const products = await productModel.findByIdAndUpdate(
+      req.params.pid,
+      { ...req.fields, slug: slugify(title) },
+      { new: true }
+    );
+    if (photo) {
+      products.photo.data = fs.readFileSync(photo.path);
+      products.photo.contentType = photo.type;
+    }
+    await products.save();
+    res.status(201).send({
+      success: true,
+      message: "Product Updated Successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in Updte product",
+    });
+  }
+};
 module.exports = {
   createProduct,
   getProduct,
   getSingleProduct,
   getProductImage,
-  deleteProduct
+  deleteProduct,
+  updateProduct
 };

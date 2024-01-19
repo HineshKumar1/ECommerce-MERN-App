@@ -45,7 +45,7 @@ function Products() {
                   name={product.title}
                   description={product.description}
                   price={product.price}
-                  link={`/dashboard/admin/products/${product.slug}`}
+                  link={`/dashboard/admin/product/${product.slug}`}
                 />
               ))}
             </div>

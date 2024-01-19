@@ -12,10 +12,16 @@ router.post(
   productController.createProduct
 );
 
-router.get("/",productController.getProduct);
-router.get("/:slug",productController.getSingleProduct);
+router.put(
+  "/:pid",
+  formidableMiddleware(),
+  productController.updateProduct
+);
 
-router.get("/image/:pid",productController.getProductImage);
-router.delete("/:id",verifyToken,isAdmin,productController.deleteProduct)
+router.get("/", productController.getProduct);
+router.get("/:slug", productController.getSingleProduct);
+
+router.get("/image/:pid", productController.getProductImage);
+router.delete("/:id", verifyToken, isAdmin, productController.deleteProduct);
 
 module.exports = router;
