@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const { hashPassword, comparePassword } = require("../helpers/authHelper");
-const JWT = require("jsonwebtoken")
+const JWT = require("jsonwebtoken");
+const {sendMail} = require("../services/email")
 require("dotenv").config();
 
 
@@ -23,6 +24,9 @@ const addUser = async (req, res) => {
     if (existingUser) {
       throw new Error("Already registered, please login!");
     }
+    const token = await JWT.sign({email},process.env.SECRET_KEY,{expiresIn:'7d'});
+    
+    await sendMail({email,token});
 
     const savedUser = await newUser.save();
     res.status(201).json({
