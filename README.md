@@ -9,12 +9,14 @@ Brief description of the project.
 1. First, navigate to the `client` directory:
    ```bash
    cd client
+
+   ```bash
    npm install
 
 2. Next, navigate to the server directory:
   ```bash
- cd ../server
+   cd ../server
 
 3. Install the required Node Modules:   
   ```bash
-npm install
+   npm install
