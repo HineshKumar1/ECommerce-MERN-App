@@ -43,7 +43,7 @@ function Products() {
                   key={product._id}
                   src={`${process.env.REACT_APP_API}/product/image/${product._id}`}
                   name={product.title}
-                  description={product.description}
+                  description={product.description.substring(0, 50)}
                   price={product.price}
                   link={`/dashboard/admin/product/${product.slug}`}
                 />

@@ -36,10 +36,6 @@ function SignUp() {
         }else{
           toast.error(response.data.message)
         }
-
-      function newFunction() {
-        Navigate('/login');
-      }
     }
   return (
     <>

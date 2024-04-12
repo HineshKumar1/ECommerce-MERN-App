@@ -58,7 +58,7 @@ const getProduct = async (req, res) => {
       status: true,
       message: "Product Fetched Successfully!",
       totalCount: product.length,
-      product
+      product,
     });
   } catch (err) {
     console.log(err);
@@ -72,7 +72,9 @@ const getProduct = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   try {
     const product = await productModel
-      .findOne({ slug: req.params.slug }).select("-image").populate("category");
+      .findOne({ slug: req.params.slug })
+      .select("-image")
+      .populate("category");
     res.status(200).send({
       status: true,
       message: "Product Fetch Successfully!",
@@ -87,15 +89,13 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
-const getProductImage = async(req,res)=>{
+const getProductImage = async (req, res) => {
   try {
-
     const product = await productModel.findById(req.params.pid).select("image");
-    if(product.image.data){
-      res.set("Content-type",product.image.contenetType);
-      return res.status(200).send(product.image.data)
+    if (product.image.data) {
+      res.set("Content-type", product.image.contenetType);
+      return res.status(200).send(product.image.data);
     }
-    
   } catch (err) {
     console.log(err);
     res.status(500).send({
@@ -103,24 +103,24 @@ const getProductImage = async(req,res)=>{
       message: "Error While fetching product image!",
     });
   }
-}
+};
 
-const deleteProduct = async(req,res,next)=>{
+const deleteProduct = async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     await productModel.findByIdAndDelete(id);
     res.status(200).send({
       status: true,
-      message:"Product delete successfully"
-    })
+      message: "Product delete successfully",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send({
-      status:false,
-      message: "Error while delete Product!"
-    })
+      status: false,
+      message: "Error while delete Product!",
+    });
   }
-}
+};
 
 const updateProduct = async (req, res) => {
   try {
@@ -169,11 +169,34 @@ const updateProduct = async (req, res) => {
     });
   }
 };
+
+//filters
+const filterProduct = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let agrs = {};
+    if (checked.length > 0) agrs.category = checked;
+    if (radio.length) agrs.price = { $gte: radio[0], $lte: radio[1] };
+    const products  = await productModel.find(agrs);
+    res.status((200)).send({
+      status:true,
+      products,
+      message:"Product Filter Successfully!"
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      status: false,
+      message: "Error while filter product",
+    });
+  }
+};
 module.exports = {
   createProduct,
   getProduct,
   getSingleProduct,
   getProductImage,
   deleteProduct,
-  updateProduct
+  updateProduct,
+  filterProduct,
 };

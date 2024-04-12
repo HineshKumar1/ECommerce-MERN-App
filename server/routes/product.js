@@ -24,4 +24,8 @@ router.get("/:slug", productController.getSingleProduct);
 router.get("/image/:pid", productController.getProductImage);
 router.delete("/:id", verifyToken, isAdmin, productController.deleteProduct);
 
+//filter product
+router.route("/filter").post(productController.filterProduct);
+
+
 module.exports = router;
