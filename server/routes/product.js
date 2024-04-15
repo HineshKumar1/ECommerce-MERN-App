@@ -27,5 +27,10 @@ router.delete("/:id", verifyToken, isAdmin, productController.deleteProduct);
 //filter product
 router.route("/filter").post(productController.filterProduct);
 
+//product count
+router.route("/count").get(productController.productCount);
+
+//prduct filter
+router.route("/list/:page").post(productController.productList);
 
 module.exports = router;

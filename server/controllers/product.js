@@ -177,17 +177,56 @@ const filterProduct = async (req, res) => {
     let agrs = {};
     if (checked.length > 0) agrs.category = checked;
     if (radio.length) agrs.price = { $gte: radio[0], $lte: radio[1] };
-    const products  = await productModel.find(agrs);
-    res.status((200)).send({
-      status:true,
+    const products = await productModel.find(agrs);
+    res.status(200).send({
+      status: true,
       products,
-      message:"Product Filter Successfully!"
-    })
+      message: "Product Filter Successfully!",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send({
       status: false,
       message: "Error while filter product",
+    });
+  }
+};
+
+const productCount = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      total,
+      message: "Product Count Successfully!",
+    });
+  } catch (error) {
+    console.log(err);
+    res.status(500).send({
+      status: false,
+      message: "Error while count product",
+    });
+  }
+};
+
+const productList = async (req, res) => {
+  try {
+    const perPage = 6;
+    const page = req.params.page ? req.params.page : 1;
+
+    const products = await productModel
+      .find({})
+      .select("-image")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+
+    res.status(200).send({success: true, products, message: "Product List Successfully!"})
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: false,
+      message: "Error while get product list",
     });
   }
 };
@@ -199,4 +238,6 @@ module.exports = {
   deleteProduct,
   updateProduct,
   filterProduct,
+  productCount,
+  productList
 };

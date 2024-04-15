@@ -17,7 +17,19 @@ function HomePage() {
   const [Categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
   const [radio, setRadio] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
 
+  //get total count of products
+  const getProductCount = async () => {
+    try{
+      const {data} = await axios.get(`${process.env.REACT_APP_API}/product/count`);
+      setTotal(data?.total)
+    }catch(error){
+      console.log(error);
+    }
+  }
+  
   const getProducts = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/product/`);
@@ -31,6 +43,7 @@ function HomePage() {
       message.error("Error While fetch product");
     }
   };
+
   const handleFilter = async (value, id) => {
     try {
       let all = [...checked];
@@ -45,6 +58,7 @@ function HomePage() {
       message.error("Error While filter product");
     }
   };
+
   //get all category
   const getAllCategory = async () => {
     try {
@@ -60,11 +74,25 @@ function HomePage() {
     }
   };
 
+    //get filter product
+    const filterProduct = async () => {
+      try {
+        const { data } = await axios.post(
+          `${process.env.REACT_APP_API}/product/filter`,
+          { checked, radio }
+        );
+        setProducts(data?.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
   useEffect(() => {
     if (!checked.length || !radio.length) {
       getProducts();
     }
     getAllCategory();
+    getProductCount();
   }, []);
 
   useEffect(() => {
@@ -73,24 +101,13 @@ function HomePage() {
     }
   }, [checked.length, radio.length]);
 
-  //get filter product
-  const filterProduct = async () => {
-    try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/product/filter`,
-        { checked, radio }
-      );
-      setProducts(data?.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   return (
     <Layout>
       <div className="row mt-3">
         <div className="col-md-2">
           <h4 className="text-center">Filter by Category </h4>
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column ml-3">
             {Categories.map((c) => (
               <Checkbox
                 key={c._id}
@@ -101,8 +118,8 @@ function HomePage() {
             ))}
           </div>
           {/*Price Filter*/}
-          <h4 className="text-center mt-4">Filter by Price</h4>
-          <div className="d-flex flex-column">
+          <h4 className="text-center mt-3">Filter by Price</h4>
+          <div className="d-flex flex-column ml-3">
             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
               {Prices?.map((p) => (
                 <div key={p?._id}>
@@ -110,6 +127,9 @@ function HomePage() {
                 </div>
               ))}
             </Radio.Group>
+          </div>
+          <div className="mt-3 ml-3 d-flex flex-column">
+            <button className="btn btn-danger" onClick={()=> window.location.reload()}>RESET FILTERS</button>
           </div>
         </div>
         <div className="col-md-9">
