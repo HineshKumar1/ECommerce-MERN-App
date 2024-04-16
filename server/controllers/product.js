@@ -1,5 +1,6 @@
 const slugify = require("slugify");
-const productModel = require("../models/product");
+const productModel = require("../models/product.js");
+const categoryModel = require("../models/category.js");
 const fs = require("fs");
 
 const createProduct = async (req, res) => {
@@ -221,7 +222,9 @@ const productList = async (req, res) => {
       .limit(perPage)
       .sort({ createdAt: -1 });
 
-    res.status(200).send({success: true, products, message: "Product List Successfully!"})
+    res
+      .status(200)
+      .send({ success: true, products, message: "Product List Successfully!" });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -234,11 +237,15 @@ const productList = async (req, res) => {
 //search product
 const searchProduct = async (req, res) => {
   try {
-    const {keyword} = req.params;
-    const result = await productModel.find({$or:[
-      {title: {$regex: keyword, $options: "i"}},
-      {description: {$regex: keyword, $options: "i"}},
-    ]}).select("-image");
+    const { keyword } = req.params;
+    const result = await productModel
+      .find({
+        $or: [
+          { title: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } },
+        ],
+      })
+      .select("-image");
 
     res.status(200).send({
       status: true,
@@ -246,26 +253,30 @@ const searchProduct = async (req, res) => {
       message: "Product search Successfully!",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({
       status: false,
       message: "Error while search product",
     });
   }
-}
+};
 
 const similarProduct = async (req, res) => {
   try {
-    const {pid, cid} = req.params;
-    const products  = await productModel.find({
-      category:cid,
-      _id:{$ne:pid}
-    }).select("-image").limit(3).populate("category");
+    const { pid, cid } = req.params;
+    const products = await productModel
+      .find({
+        category: cid,
+        _id: { $ne: pid },
+      })
+      .select("-image")
+      .limit(3)
+      .populate("category");
     res.status(200).send({
       status: true,
       products,
-      message: "Similar Product fetch Successfully!"
-    })
+      message: "Similar Product fetch Successfully!",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -273,7 +284,30 @@ const similarProduct = async (req, res) => {
       message: "Error while fetch similar product",
     });
   }
-}
+};
+
+const productCategory = async (req, res) => {
+  try {
+    const category = await categoryModel.find({ slug: req.params.slug });
+  
+    const product = await productModel
+      .find({ category: category[0]?._id }).select("-image").populate("category");
+    console.log(product)
+    res.status(200).send({
+      status: true,
+      message: "Category wise product fetch successfully",
+      category,
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: false,
+      message: "Error While fetch product category",
+      error,
+    });
+  }
+};
 module.exports = {
   createProduct,
   getProduct,
@@ -285,5 +319,6 @@ module.exports = {
   productCount,
   productList,
   searchProduct,
-  similarProduct
+  similarProduct,
+  productCategory,
 };
