@@ -11,20 +11,26 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
+import { useNavigate } from "react-router-dom";
+
+
 
 function HomePage() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [Categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
   const [radio, setRadio] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
 
   //get total count of products
   const getProductCount = async () => {
     try{
-      const {data} = await axios.get(`${process.env.REACT_APP_API}/product/count`);
-      setTotal(data?.total)
+      const {data} = await axios.post(`${process.env.REACT_APP_API}/product/count`);
+      setTotal(data?.total);
     }catch(error){
       console.log(error);
     }
@@ -32,14 +38,17 @@ function HomePage() {
   
   const getProducts = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API}/product/`);
-      if (data.status) {
-        setProducts(data.product);
+      setLoading(true)
+      const { data } = await axios.get(`${process.env.REACT_APP_API}/product/list/${page}`);
+      setLoading(false)
+      if (data.success) {
+        setProducts(data.products);
       } else {
         message.error(data.message);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false)
       message.error("Error While fetch product");
     }
   };
@@ -58,6 +67,23 @@ function HomePage() {
       message.error("Error While filter product");
     }
   };
+
+  //load more product
+  const loadMore = async()=>{
+    try {
+      setLoading(true)
+      const {data} = axios.get(`${process.env.REACT_APP_API}/product/list/${page}`);
+      setLoading(false)
+      setProducts([...products, ...data?.products])
+    } catch (error) {
+      setLoading(false)
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    if(page === 1) return;
+    loadMore();
+    }, [page])
 
   //get all category
   const getAllCategory = async () => {
@@ -133,7 +159,7 @@ function HomePage() {
           </div>
         </div>
         <div className="col-md-9">
-          {JSON.stringify(radio, null, 4)}
+          {/* {JSON.stringify(radio, null, 4)} */}
           <h1 className="text-center">All Products</h1>
           <div className="d-flex flex-wrap">
             {products.map((product, index) => (
@@ -156,11 +182,21 @@ function HomePage() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">More Details</Button>
+                  <Button size="small" onClick={()=>{navigate(`/product/${product?.slug}`)}}>More Details</Button>
                   <Button size="small">Add Cart</Button>
                 </CardActions>
               </Card>
             ))}
+          </div>
+          <div className="m-2 p-3">
+            {products && products.length < total && (
+              <button className="btn btn-warning" onClick={()=>{
+                setPage(page + 1);
+                console.log("prd", products.length, "total", total,"Page",page)
+              }}>
+                {loading ? "Loading...." : "Load More"}
+              </button>
+            )}
           </div>
         </div>
       </div>

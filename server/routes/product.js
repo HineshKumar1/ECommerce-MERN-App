@@ -28,9 +28,14 @@ router.delete("/:id", verifyToken, isAdmin, productController.deleteProduct);
 router.route("/filter").post(productController.filterProduct);
 
 //product count
-router.route("/count").get(productController.productCount);
+router.route("/count").post(productController.productCount);
 
 //prduct filter
-router.route("/list/:page").post(productController.productList);
+router.get("/list/:page", productController.productList);
 
+//search product
+router.get("/search/:keyword", productController.searchProduct);
+
+//similar products
+router.get("/related-products/:pid", productController.similarProduct);
 module.exports = router;

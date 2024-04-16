@@ -191,17 +191,17 @@ const filterProduct = async (req, res) => {
     });
   }
 };
-
+//Product Count
 const productCount = async (req, res) => {
   try {
     const total = await productModel.find({}).estimatedDocumentCount();
     res.status(200).send({
-      success: true,
+      status: true,
       total,
       message: "Product Count Successfully!",
     });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.status(500).send({
       status: false,
       message: "Error while count product",
@@ -211,7 +211,7 @@ const productCount = async (req, res) => {
 
 const productList = async (req, res) => {
   try {
-    const perPage = 6;
+    const perPage = 3;
     const page = req.params.page ? req.params.page : 1;
 
     const products = await productModel
@@ -230,6 +230,47 @@ const productList = async (req, res) => {
     });
   }
 };
+
+//search product
+const searchProduct = async (req, res) => {
+  try {
+    const {keyword} = req.params;
+    const result = await productModel.find({$or:[
+      {title: {$regex: keyword, $options: "i"}},
+      {description: {$regex: keyword, $options: "i"}},
+    ]}).select("-image");
+
+    res.status(200).send({
+      status: true,
+      result,
+      message: "Product search Successfully!",
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error while search product",
+    });
+  }
+}
+
+const similarProduct = async (req, res) => {
+  try {
+    const product = await productModel.findById(req.params.pid);
+    const similar = await productModel.find({category: product.category}).limit(3);
+    res.status(200).send({
+      status: true,
+      similar,
+      message: "Similar Product fetch Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: false,
+      message: "Error while fetch similar product",
+    });
+  }
+}
 module.exports = {
   createProduct,
   getProduct,
@@ -239,5 +280,7 @@ module.exports = {
   updateProduct,
   filterProduct,
   productCount,
-  productList
+  productList,
+  searchProduct,
+  similarProduct
 };
