@@ -211,7 +211,7 @@ const productCount = async (req, res) => {
 
 const productList = async (req, res) => {
   try {
-    const perPage = 3;
+    const perPage = 6;
     const page = req.params.page ? req.params.page : 1;
 
     const products = await productModel
@@ -256,13 +256,16 @@ const searchProduct = async (req, res) => {
 
 const similarProduct = async (req, res) => {
   try {
-    const product = await productModel.findById(req.params.pid);
-    const similar = await productModel.find({category: product.category}).limit(3);
+    const {pid, cid} = req.params;
+    const products  = await productModel.find({
+      category:cid,
+      _id:{$ne:pid}
+    }).select("-image").limit(3).populate("category");
     res.status(200).send({
       status: true,
-      similar,
-      message: "Similar Product fetch Successfully!",
-    });
+      products,
+      message: "Similar Product fetch Successfully!"
+    })
   } catch (error) {
     console.log(error);
     res.status(500).send({

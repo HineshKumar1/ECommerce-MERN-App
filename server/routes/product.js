@@ -37,5 +37,5 @@ router.get("/list/:page", productController.productList);
 router.get("/search/:keyword", productController.searchProduct);
 
 //similar products
-router.get("/related-products/:pid", productController.similarProduct);
+router.get("/related/:pid/:cid", productController.similarProduct);
 module.exports = router;
