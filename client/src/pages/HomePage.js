@@ -12,11 +12,15 @@ import Typography from "@mui/material/Typography";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../components/context/cart";
+import { toast } from "react-toastify";
+
 
 
 
 function HomePage() {
   const navigate = useNavigate();
+  const [cart,setCart]  = useCart();
   const [products, setProducts] = useState([]);
   const [Categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -183,7 +187,12 @@ function HomePage() {
                 </CardContent>
                 <CardActions>
                   <Button size="small" onClick={()=>{navigate(`/product/${product?.slug}`)}}>More Details</Button>
-                  <Button size="small">Add Cart</Button>
+                  <Button size="small" onClick={()=>{
+                  setCart([...cart, product]);
+                  localStorage.setItem('cart',JSON.stringify([...cart,products]))
+                  toast.success("Product added to cart");
+                  console.log("Cart", cart)
+                  }}>Add Cart</Button>
                 </CardActions>
               </Card>
             ))}
@@ -192,7 +201,6 @@ function HomePage() {
             {products && products.length < total && (
               <button className="btn btn-warning" onClick={()=>{
                 setPage(page + 1);
-                console.log("prd", products.length, "total", total,"Page",page)
               }}>
                 {loading ? "Loading...." : "Load More"}
               </button>
