@@ -41,4 +41,10 @@ router.get("/related/:pid/:cid", productController.similarProduct);
 
 //category wise product
 router.get("/category/:slug",productController.productCategory)
+
+//braintree token
+router.get("/braintree/token", productController.brainTreeTokenController);
+
+//braintree payment
+router.post("/braintree/payment",verifyToken, productController.braintreePaymentController);
 module.exports = router;
