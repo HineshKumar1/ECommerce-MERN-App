@@ -54,7 +54,7 @@ function AdminOrder() {
             <h1 className="text-center">All Orders</h1>
             <div className="border">
               {orders.map((order, index) => (
-                <div key={order._id} className="container mt-2">
+                <div key={order._id} className="container mt-2 mb-2">
                   <table className="table">
                     <thead>
                       <tr>

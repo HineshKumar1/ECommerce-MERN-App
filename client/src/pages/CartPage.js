@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "../styles/CartStyles.css";
 
 function CartPage() {
   const [cart, setCart] = useCart();

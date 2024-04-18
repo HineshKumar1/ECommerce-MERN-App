@@ -14,9 +14,8 @@ import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../components/context/cart";
 import { toast } from "react-toastify";
-
-
-
+import image from "../images/banner.jpeg";
+import  "../styles/Homepage.css";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -134,6 +133,13 @@ function HomePage() {
 
   return (
     <Layout>
+      {/* banner image */}
+      <img
+        src={image}
+        className="banner-img"
+        alt="bannerimage"
+        width={"100%"}
+      />
       <div className="row mt-3">
         <div className="col-md-2">
           <h4 className="text-center">Filter by Category </h4>
