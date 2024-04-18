@@ -1,39 +1,57 @@
 import React, { useState, useEffect } from "react";
+import AdminMenu from "../../components/layout/AdminMenu";
 import Layout from "../../components/layout/Layout";
-import UserMenu from "../../components/layout/UserMenu";
 import axios from "axios";
-import { useAuth } from "../../components/context/auth";
 import moment from "moment";
+import { Select } from "antd";
+const { Option } = Select;
 
-function Orders() {
+function AdminOrder() {
+  const [status, setStatus] = useState([
+    "pending",
+    "completed",
+    "cancelled",
+    "delivered",
+  ]);
+  const [changeStatus, setChangeStatus] = useState("");
+  const [auth, setAuth] = useState();
+
   const [orders, setOrders] = useState([]);
-  const [auth] = useAuth();
-
-  // Get orders
-  const getOrders = async () => {
+  const getAllOrders = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/user/orders`
+        `${process.env.REACT_APP_API}/user/all-orders`
       );
-      setOrders(data?.orders);
+      setOrders(data.orders);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleChangeStatus = async (orderId, value) => {
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_API}/user/order-status/${orderId}`,
+        { status: value }
+      );
+      getAllOrders();   
+    } catch (error) {
+      console.log(error);
+    }
+  
+  }
   useEffect(() => {
-    getOrders();
+    getAllOrders();
   }, [auth?.token]);
-
   return (
-    <Layout title={"Dashboard - Orders"}>
-      <div className="container-fluid mt-3">
+    <>
+      <Layout>
         <div className="row">
           <div className="col-md-3">
-            <UserMenu />
+            <AdminMenu />
           </div>
           <div className="col-md-9">
-            <h1>Orders</h1>
+            <h1 className="text-center">All Orders</h1>
             <div className="border">
               {orders.map((order, index) => (
                 <div key={order._id} className="container mt-2">
@@ -52,10 +70,26 @@ function Orders() {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{order.status}</td>
+                        <td>
+                          <Select
+                            bordered={false}
+                            onChange={(value,orderId) => handleChangeStatus(order?._id,value)}
+                            defaultValue={order.status}
+                          >
+                            {status.map((s) => (
+                              <>
+                                <Option key={s} value={s}>
+                                  {s}
+                                </Option>
+                              </>
+                            ))}
+                          </Select>
+                        </td>
                         <td>{order?.buyer?.name}</td>
                         <td>{moment(order?.createdAt).fromNow()}</td>
-                        <td>{order?.payment?.success ? "Success" : "Failed"}</td>
+                        <td>
+                          {order?.payment?.success ? "Success" : "Failed"}
+                        </td>
                         <td>{order?.products?.length}</td>
                       </tr>
                     </tbody>
@@ -85,9 +119,9 @@ function Orders() {
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
 
-export default Orders;
+export default AdminOrder;

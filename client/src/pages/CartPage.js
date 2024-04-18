@@ -39,6 +39,7 @@ function CartPage() {
         {
           nonce ,
           cart,
+          id: auth?.user?.id,
         }
       );
       setLoading(false);

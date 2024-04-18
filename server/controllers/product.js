@@ -350,7 +350,7 @@ const brainTreeTokenController = async (req, res) => {
 
 const braintreePaymentController = async (req, res) => {
   try {
-    const { cart, nonce } = req.body;
+    const { cart, nonce , id } = req.body;
     let total = 0;
     cart.map((i) => (total += i.price));
     let newTransaction = await gateway.transaction.sale(
@@ -376,7 +376,7 @@ const braintreePaymentController = async (req, res) => {
           const order = new orderModel({
             products: cart,
             payment: result,
-            buyer: req.user.id
+            buyer: id,
           }).save();
           res.status(200).send({
             status: true,

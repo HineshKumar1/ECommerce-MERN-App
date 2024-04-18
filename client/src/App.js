@@ -23,6 +23,7 @@ import Search from "./pages/Search";
 import ProductDetails from "./pages/ProductDetails";
 import CategoryProducts from "./pages/CategoryProducts";
 import CartPage from "./pages/CartPage";
+import AdminOrder from "./pages/Admin/AdminOrder";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="admin/users" element={<Users />}></Route>
           <Route path="admin/products" element={<Products />}></Route>
           <Route path="admin/product/:slug" element={<UpdateProduct/>}></Route>
+          <Route path="admin/orders" element={<AdminOrder/>}></Route>
         </Route>
 
         <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
