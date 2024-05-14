@@ -5,6 +5,8 @@ const { verifyToken, isAdmin } = require("../middleware/auth");
 
 router.post("/", userController.addUser);
 router.post("/login", userController.login);
+router.route("/forgot-password").post(userController.forgotPassword);
+router.route("/reset-password/:userId/:token").post(userController.resetPassword);
 
 //protected route:
 router.get("/user-auth", verifyToken, (req, res) => {

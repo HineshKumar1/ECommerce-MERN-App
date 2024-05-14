@@ -24,6 +24,7 @@ import ProductDetails from "./pages/ProductDetails";
 import CategoryProducts from "./pages/CategoryProducts";
 import CartPage from "./pages/CartPage";
 import AdminOrder from "./pages/Admin/AdminOrder";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         </Route>
 
         <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
+        <Route path="/resetpassword" element={<ResetPassword />}></Route>
         <Route path="/policy" element={<Policy />}></Route>
         <Route path="/policy" element={<Policy />}></Route>
         <Route path="/policy" element={<Policy />}></Route>

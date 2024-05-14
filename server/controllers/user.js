@@ -3,6 +3,8 @@ const { hashPassword, comparePassword } = require("../helpers/authHelper");
 const JWT = require("jsonwebtoken");
 const { sendMail } = require("../services/email");
 const orderModel = require("../models/order");
+const Token = require("../models/token");
+const crypto = require("crypto");
 require("dotenv").config();
 
 // Controller function to handle user creation
@@ -177,6 +179,77 @@ const updateOrderStatus = async (req, res) => {
     });
   }
 };
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(403).send({
+      success: false,
+      message: "Please Enter a correct Email address",
+    });
+  }
+
+  const userExists = await User.findOne({ email });
+
+  if (!userExists) {
+    return res.status(404).send({
+      success: false,
+      message: "User with this Email does not exits!",
+    });
+  }
+
+  let token = await Token.findOne({ userId: userExists._id });
+  if (!token) {
+    token = await new Token({
+      userId: userExists._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
+  }
+
+  const link = `${process.env.BASE_URL}/resetpassowrd/${userExists._id}/${token.token}`;
+
+  await sendMail({ email, subject: "Forgot Password", link });
+
+  return res.status(200).send({
+    success: true,
+    message: "Email send successfully",
+  });
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { userId, token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user)
+      return res
+        .status(400)
+        .send({ success: false, message: "Invalid link or expired" });
+
+    const hashedPassword = await hashPassword(password);
+    const tokenExists = await Token.findOne({
+      userId: user._id,
+      token: token,
+    });
+    if (!tokenExists)
+      return res
+        .status(400)
+        .send({ success: false, message: "Invalid link or expired" });
+
+    user.password = hashedPassword;
+    await user.save();
+    await tokenExists.deleteOne();
+
+    res
+      .status(200)
+      .send({ success: true, message: "password reset sucessfully." });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addUser,
   login,
@@ -184,4 +257,6 @@ module.exports = {
   getAllOrders,
   getUsers,
   updateOrderStatus,
+  forgotPassword,
+  resetPassword,
 };

@@ -37,7 +37,7 @@ function Login() {
           setTimeout(()=>{
             Navigate(location.state || "/");
           },1000)
-        }else{
+        }else if(response.data.status === "false"){
           toast.error(response.data.message)
         }
     }
