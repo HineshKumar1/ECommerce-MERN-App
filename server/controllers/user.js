@@ -30,8 +30,6 @@ const addUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    await sendMail({ email, token });
-
     const savedUser = await newUser.save();
     res.status(201).json({
       status: true,
@@ -207,10 +205,10 @@ const forgotPassword = async (req, res) => {
     }).save();
   }
 
-  const link = `${process.env.BASE_URL}/resetpassowrd/${userExists._id}/${token.token}`;
+  const link = `${process.env.BASE_URL}/resetpassword/${userExists._id}/${token.token}`;
 
-  await sendMail({ email, subject: "Forgot Password", link });
-
+  const mail = await sendMail({ email, subject: "Forgot Password", link });
+  console.log(mail)
   return res.status(200).send({
     success: true,
     message: "Email send successfully",

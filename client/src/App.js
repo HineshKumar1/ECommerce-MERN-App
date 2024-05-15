@@ -52,7 +52,7 @@ function App() {
         </Route>
 
         <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
-        <Route path="/resetpassword" element={<ResetPassword />}></Route>
+        <Route path="/resetpassword/:userId/:token" element={<ResetPassword />}></Route>
         <Route path="/policy" element={<Policy />}></Route>
         <Route path="/policy" element={<Policy />}></Route>
         <Route path="/policy" element={<Policy />}></Route>
